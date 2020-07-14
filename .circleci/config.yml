@@ -1,0 +1,23 @@
+# Python CircleCI 2.0 configuration file
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/python:3.8
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: |
+            pip install -r requirements.txt
+      - run:
+          name: Run tests
+          command: |
+            mkdir test-results
+            flake8 --statistics
+            pytest -v --cov=main --junitxml=test-results/junit.xml
+      - store_test_results:
+          path: test-results
